@@ -1,22 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row, Modal, Input } from "antd";
+import { Col, Row, Modal, Input, Spin } from "antd";
 import { useFilmContext } from "../context/film";
 
-const FilmsDialog = ({ handleCancel, saveFilm }) => {
+const FilmsDialog = ({ handleCancel, saveFilm, loading }) => {
   const initialState = {
     name: "",
     description: "",
     imageUrl: "",
   };
+
   const FilmContext = useFilmContext();
   const { editFilm } = FilmContext.state;
-
   const [state, setFormData] = useState(initialState);
   const { name, description, imageUrl } = state;
+
+  /*
+  const formData = useMemo(() => {
+    return {
+      name,
+      description,
+      imageUrl,
+    };
+  }, [name, description, imageUrl]);
+  */
+
   const { TextArea } = Input;
 
   useEffect(() => {
-    if (editFilm.length) {
+    if (editFilm) {
       setFormData(editFilm);
     }
   }, []);
@@ -58,6 +69,20 @@ const FilmsDialog = ({ handleCancel, saveFilm }) => {
           />
         </Col>
       </Row>
+      {loading === true ? (
+        <div
+          style={{
+            zIndex: -5,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <Spin size={"large"} />
+        </div>
+      ) : (
+        <></>
+      )}
 
       <Row style={{ marginBottom: 10 }}>
         <Col span={24}>

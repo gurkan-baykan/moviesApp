@@ -1,7 +1,11 @@
 .App {
   text-align: center;
 }
-
+.spinner {
+  position: absolute;
+  left: 50%;
+  margin-left: -4em;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;

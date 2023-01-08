@@ -15,16 +15,22 @@ export const FilmContextProvider = ({ children }) => {
 
   const [state, setContextData] = useState(initialState);
 
-  const mergeState = (partialState) => {
-    setContextData((prevState) => ({
-      ...prevState,
-      partialState,
-    }));
-  };
+  const mergeState = useCallback(
+    (partialState) => {
+      setContextData((prevState) => ({
+        ...prevState,
+        ...partialState,
+      }));
+    },
+    [setContextData]
+  );
 
-  const setEditItem = useCallback((value) => {
-    mergeState({ editFilm: value });
-  }, []);
+  const setEditItem = useCallback(
+    (value) => {
+      mergeState({ editFilm: value });
+    },
+    [mergeState]
+  );
 
   const providerState = useMemo(
     () => ({

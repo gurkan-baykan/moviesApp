@@ -3,7 +3,7 @@ import axios from "axios";
 import { fetchFilms, postFilm, updateFilm, deleteFilm } from "./services/films";
 import FilmsDialog from "./components/FilmsDialog";
 import Header from "./components/Header";
-import { Col, Row, Card, Button, Modal, Input } from "antd";
+import { Col, Row, Button } from "antd";
 import "./App.css";
 import SwiperSlider from "./components/SwiperSlider";
 import ListFilms from "./screen/ListFilms";
@@ -15,6 +15,7 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 function App() {
   const [films, setFilm] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -22,18 +23,24 @@ function App() {
   const handleCancel = useCallback(() => {
     setIsModalOpen(false);
   }, []);
-
   const saveFilm = useCallback((state) => {
+    setLoading(true);
     if (state._id) {
-      updateFilm(state).then(() => {
-        getFilms();
-        handleCancel();
-      });
+      updateFilm(state)
+        .then(() => {
+          setLoading(false);
+          getFilms();
+          handleCancel();
+        })
+        .catch((e) => console.log(e));
     } else {
-      postFilm(state).then(() => {
-        getFilms();
-        handleCancel();
-      });
+      postFilm(state)
+        .then(() => {
+          setLoading(false);
+          getFilms();
+          handleCancel();
+        })
+        .catch((e) => console.log(e));
     }
   }, []);
 
@@ -58,6 +65,7 @@ function App() {
     <FilmContextProvider>
       <div className="App">
         <Header />
+
         <Row
           gutter={{
             xs: 8,
@@ -76,7 +84,11 @@ function App() {
           </Col>
 
           {isModalOpen === true ? (
-            <FilmsDialog handleCancel={handleCancel} saveFilm={saveFilm} />
+            <FilmsDialog
+              handleCancel={handleCancel}
+              saveFilm={saveFilm}
+              loading={loading}
+            />
           ) : (
             <></>
           )}
@@ -90,7 +102,35 @@ function App() {
           </Row>
         </div>
 
-        <ListFilms films={films} editFilm={editFilm} />
+        <div>
+          <Row justify="start" wrap={true}>
+            <Col span={10}>
+              <span style={{ fontWeight: "bold", fontSize: 20 }}>
+                Yeni Listeler
+              </span>
+            </Col>
+          </Row>
+
+          <Row
+            gutter={{
+              xs: 8,
+              sm: 16,
+              md: 24,
+              lg: 32,
+            }}
+            style={{ margin: 15 }}
+          >
+            {films.map((item) => {
+              return (
+                <ListFilms
+                  item={item}
+                  editFilm={editFilm}
+                  deprecateFilm={deprecateFilm}
+                />
+              );
+            })}
+          </Row>
+        </div>
       </div>
     </FilmContextProvider>
   );
