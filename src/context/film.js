@@ -25,6 +25,10 @@ export const FilmContextProvider = ({ children }) => {
     [setContextData]
   );
 
+  const clearItem = useCallback(() => {
+    mergeState({ editFilm: {} });
+  }, [mergeState]);
+
   const setEditItem = useCallback(
     (value) => {
       mergeState({ editFilm: value });
@@ -36,8 +40,9 @@ export const FilmContextProvider = ({ children }) => {
     () => ({
       state,
       setEditItem,
+      clearItem,
     }),
-    [state, setEditItem]
+    [state, setEditItem, clearItem]
   );
 
   return (

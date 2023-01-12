@@ -2,7 +2,8 @@ import React from "react";
 import { Col, Row, Card } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useFilmContext } from "../context/film";
-const ListFilms = ({ item, editFilm, deprecateFilm }) => {
+
+const ListFilms = ({ item, editFilm, deprecateFilm, goPage }) => {
   const FilmContext = useFilmContext();
 
   const editItem = (item) => {
@@ -29,7 +30,7 @@ const ListFilms = ({ item, editFilm, deprecateFilm }) => {
         </Row>
       </Card>
       <Card
-        onClick={() => console.log(456)}
+        onClick={() => goPage(item)}
         hoverable
         style={{
           width: 320,

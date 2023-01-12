@@ -30,7 +30,12 @@ const FilmsDialog = ({ handleCancel, saveFilm, loading }) => {
     if (editFilm) {
       setFormData(editFilm);
     }
-  }, []);
+
+    return () => {
+      console.log(43645);
+      FilmContext.clearItem();
+    };
+  }, [setFormData]);
 
   return (
     <Modal

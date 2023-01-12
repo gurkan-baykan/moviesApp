@@ -8,6 +8,7 @@ import "./App.css";
 import SwiperSlider from "./components/SwiperSlider";
 import ListFilms from "./screen/ListFilms";
 import { FilmContextProvider } from "./context/film";
+import { useNavigate } from "react-router-dom";
 
 axios.defaults.baseURL = "http://localhost:3007/film";
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -16,10 +17,12 @@ function App() {
   const [films, setFilm] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const showModal = () => {
     setIsModalOpen(true);
   };
+
   const handleCancel = useCallback(() => {
     setIsModalOpen(false);
   }, []);
@@ -57,6 +60,10 @@ function App() {
     });
   }, [films]);
 
+  const goPage = (item) => {
+    console.log(item, 13432);
+    return navigate("/FilmDetails", { replace: true, state: { item } });
+  };
   useEffect(() => {
     getFilms();
   }, []);
@@ -123,6 +130,7 @@ function App() {
             {films.map((item) => {
               return (
                 <ListFilms
+                  goPage={goPage}
                   item={item}
                   editFilm={editFilm}
                   deprecateFilm={deprecateFilm}
